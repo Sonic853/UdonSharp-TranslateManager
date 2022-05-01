@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -12,8 +12,10 @@ namespace UdonLab
     public class TranslatePo : UdonSharpBehaviour
     {
         [SerializeField] private TextAsset poFile;
-        private string[] msgid;
-        private string[] msgstr;
+        [TextArea(3, 10)]
+        [HideInInspector] private string[] msgid;
+        [TextArea(3, 10)]
+        [HideInInspector] private string[] msgstr;
         [HideInInspector] public string language;
         // void Start()
         // {
@@ -34,35 +36,42 @@ namespace UdonLab
             for (int i = 0; i < lines.Length; i++)
             {
                 string line = lines[i];
+                // Debug.Log(line);
+                // msgid \"你好，Lindinia\"
                 if (line.StartsWith("msgid \""))
                 {
-                    msgid = stringArrayAdd(msgid, line.Substring(7, line.Length - 8));
+                    // 将\\n替换为\n
+                    string text = returnText(line.Substring(7, line.Length - 8));
+                    msgid = stringArrayAdd(msgid, text);
                     msgidIndex = msgid.Length - 1;
                     msgstrIndex = -1;
                 }
                 else if (line.StartsWith("msgstr \""))
                 {
-                    msgstr = stringArrayAdd(msgstr, line.Substring(8, line.Length - 9));
+                    string text = returnText(line.Substring(8, line.Length - 9));
+                    msgstr = stringArrayAdd(msgstr, text);
                     msgstrIndex = msgstr.Length - 1;
                     msgidIndex = -1;
                 }
                 // "Language: zh_CN\n"
                 // 找到符合"Language: 的行，然后获取语言，同时去除后面的换行
-                else if (line.StartsWith("\"Language: "))
+                else if (line.StartsWith("\"Language: ") && msgstrIndex == 0)
                 {
                     language = line.Substring(11, line.Length - 12);
                     // 找到并去除\n
-                    language = language.IndexOf('\n') == -1 ? language : language.Substring(0, language.IndexOf('\n'));
+                    language = language.IndexOf("\\n") == -1 ? language : language.Substring(0, language.IndexOf("\\n"));
                 }
                 else if (line.StartsWith("\""))
                 {
                     if (msgidIndex != -1 && msgidIndex != 0)
                     {
-                        msgid[msgidIndex] += "\n" + line.Substring(1, line.Length - 2);
+                        string text = returnText(line.Substring(1, line.Length - 2));
+                        msgid[msgidIndex] += text;
                     }
                     else if (msgstrIndex != -1 && msgstrIndex != 0)
                     {
-                        msgstr[msgstrIndex] += "\n" + line.Substring(1, line.Length - 2);
+                        string text = returnText(line.Substring(1, line.Length - 2));
+                        msgstr[msgstrIndex] += text;
                     }
                 }
             }
@@ -71,6 +80,23 @@ namespace UdonLab
                 Debug.LogError("msgid.Length != msgstr.Length");
                 return;
             }
+            // for (int i = 0; i < msgid.Length; i++)
+            // {
+            //     Debug.Log(msgid[i] + "\n\n" + msgstr[i]);
+            // }
+        }
+        string returnText(string text)
+        {
+            if (text.EndsWith("\""))
+            {
+                text = text.Substring(0, text.Length - 1);
+            }
+            if (text.EndsWith("\\n"))
+            {
+                text = text.Substring(0, text.Length - 2);
+                text = text + "\n";
+            }
+            return text;
         }
         public string _getText(string text)
         {

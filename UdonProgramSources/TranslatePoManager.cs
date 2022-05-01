@@ -28,8 +28,8 @@ namespace UdonLab
         [Header("是否从父物体获取需要翻译的UI")]
         [Header("Whether to get the UI to translate from the parent object")]
         [SerializeField] bool getFromParent = false;
-        [Header("需要翻译的父物体")]
-        [Header("The parent object to translate")]
+        [Header("需要翻译的父物体（勾选从父物体获取时可用）")]
+        [Header("The parent object to translate (not selected when getting from parent object is not available)")]
         [SerializeField] GameObject parentObject;
         [Header("需要翻译的文本（勾选从父物体获取时不可用）")]
         [Header("The text to translate (when get from parent object is not available)")]
@@ -48,7 +48,20 @@ namespace UdonLab
             defaultLanguage = (defaultLanguage + 1) % translatePos.Length;
             updateUI();
         }
-
+        public void switchLanguagePrevious()
+        {
+            defaultLanguage = (defaultLanguage - 1 + translatePos.Length) % translatePos.Length;
+            updateUI();
+        }
+        public string getLanguageName(int language)
+        {
+            if (language < 0 || language >= translatePos.Length) return "";
+            return translatePos[language].language;
+        }
+        public string returnLanguageName()
+        {
+            return getLanguageName(defaultLanguage);
+        }
         public string _getText(string text)
         {
             if (defaultLanguage == 0)

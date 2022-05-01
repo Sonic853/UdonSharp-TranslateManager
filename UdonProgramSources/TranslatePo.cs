@@ -37,23 +37,19 @@ namespace UdonLab
             {
                 string line = lines[i];
                 // Debug.Log(line);
-                // msgid \"你好，Lindinia\"
                 if (line.StartsWith("msgid \""))
                 {
                     // 将\\n替换为\n
-                    string text = returnText(line.Substring(7, line.Length - 8));
-                    msgid = stringArrayAdd(msgid, text);
+                    msgid = stringArrayAdd(msgid, returnText(line.Substring(7, line.Length - 8)));
                     msgidIndex = msgid.Length - 1;
                     msgstrIndex = -1;
                 }
                 else if (line.StartsWith("msgstr \""))
                 {
-                    string text = returnText(line.Substring(8, line.Length - 9));
-                    msgstr = stringArrayAdd(msgstr, text);
+                    msgstr = stringArrayAdd(msgstr, returnText(line.Substring(8, line.Length - 9)));
                     msgstrIndex = msgstr.Length - 1;
                     msgidIndex = -1;
                 }
-                // "Language: zh_CN\n"
                 // 找到符合"Language: 的行，然后获取语言，同时去除后面的换行
                 else if (line.StartsWith("\"Language: ") && msgstrIndex == 0)
                 {
@@ -65,13 +61,11 @@ namespace UdonLab
                 {
                     if (msgidIndex != -1 && msgidIndex != 0)
                     {
-                        string text = returnText(line.Substring(1, line.Length - 2));
-                        msgid[msgidIndex] += text;
+                        msgid[msgidIndex] += returnText(line.Substring(1, line.Length - 2));
                     }
                     else if (msgstrIndex != -1 && msgstrIndex != 0)
                     {
-                        string text = returnText(line.Substring(1, line.Length - 2));
-                        msgstr[msgstrIndex] += text;
+                        msgstr[msgstrIndex] += returnText(line.Substring(1, line.Length - 2));
                     }
                 }
             }

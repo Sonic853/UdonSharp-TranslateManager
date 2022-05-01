@@ -555,7 +555,7 @@ MonoBehaviour:
       Data: 43|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u9700\u8981\u7FFB\u8BD1\u7684\u7236\u7269\u4F53"
+      Data: "\u9700\u8981\u7FFB\u8BD1\u7684\u7236\u7269\u4F53\uFF08\u52FE\u9009\u4ECE\u7236\u7269\u4F53\u83B7\u53D6\u65F6\u53EF\u7528\uFF09"
     - Name: 
       Entry: 8
       Data: 
@@ -564,7 +564,8 @@ MonoBehaviour:
       Data: 44|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: The parent object to translate
+      Data: The parent object to translate (not selected when getting from parent
+        object is not available)
     - Name: 
       Entry: 8
       Data: 

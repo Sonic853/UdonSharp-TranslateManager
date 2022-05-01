@@ -63,8 +63,14 @@ namespace UdonLab
         // [Header("翻译文本，第一个先放原文本（Mode为3时有效）")]
         // [Header("Translate text, put original text first(valid when Mode is 3)")]
         // [SerializeField] TranslatePo[] translatePos;
-        [Header("需要翻译的文本")]
-        [Header("Text to translate")]
+        [Header("是否从父物体获取需要翻译的UI")]
+        [Header("Whether to get the UI to translate from the parent object")]
+        [SerializeField] bool getFromParent = false;
+        [Header("需要翻译的父物体（勾选从父物体获取时可用）")]
+        [Header("The parent object to translate (not selected when getting from parent object is not available)")]
+        [SerializeField] GameObject parentObject;
+        [Header("需要翻译的文本（勾选从父物体获取时不可用）")]
+        [Header("The text to translate (when get from parent object is not available)")]
         [SerializeField] Text[] texts;
         [SerializeField] TextMeshPro[] textMeshTexts;
         [SerializeField] TextMeshProUGUI[] textMeshUGUITexts;
@@ -79,6 +85,11 @@ namespace UdonLab
         public void switchLanguage()
         {
             setLanguage((defaultLanguage + 1) % languageNames.Length);
+            updateUI();
+        }
+        public void switchLanguagePrevious()
+        {
+            setLanguage((defaultLanguage - 1 + languageNames.Length) % languageNames.Length);
             updateUI();
         }
         public string _getText(string text)
@@ -220,6 +231,12 @@ namespace UdonLab
         }
         void Start()
         {
+            if (getFromParent)
+            {
+                texts = parentObject.GetComponentsInChildren<Text>(true);
+                textMeshTexts = parentObject.GetComponentsInChildren<TextMeshPro>(true);
+                textMeshUGUITexts = parentObject.GetComponentsInChildren<TextMeshProUGUI>(true);
+            }
             if (mode == 2)
             {
                 _texts = new string[texts.Length];

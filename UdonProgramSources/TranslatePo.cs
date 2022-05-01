@@ -17,6 +17,7 @@ namespace UdonLab
         [TextArea(3, 10)]
         [HideInInspector] private string[] msgstr;
         [HideInInspector] public string language;
+        [HideInInspector] public string lastTranslator = "anonymous";
         // void Start()
         // {
         //     ReadPoFile();
@@ -56,6 +57,15 @@ namespace UdonLab
                     language = line.Substring(11, line.Length - 12);
                     // 找到并去除\n
                     language = language.IndexOf("\\n") == -1 ? language : language.Substring(0, language.IndexOf("\\n"));
+                }
+                // 找到符合"Last-Translator: 的行，然后获取语言，同时去除后面的换行
+                else if (line.StartsWith("\"Last-Translator: ") && msgstrIndex == 0)
+                {
+                    lastTranslator = line.Substring(20, line.Length - 21);
+                    // 找到并去除\n
+                    lastTranslator = lastTranslator.IndexOf("\\n") == -1 ? lastTranslator : lastTranslator.Substring(0, lastTranslator.IndexOf("\\n"));
+                    // 将<和>替换为＜和＞
+                    lastTranslator = lastTranslator.Replace("<", "＜").Replace(">", "＞");
                 }
                 else if (line.StartsWith("\""))
                 {

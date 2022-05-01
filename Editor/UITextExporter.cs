@@ -187,11 +187,11 @@ namespace UdonLab
                 {
                     int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
                     headIndex++;
-                    heads[index] = heads[index] + " " + head + " Text:" + headIndex.ToString();
+                    heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[Text]:" + headIndex.ToString();
                 }
                 else
                 {
-                    heads.Add(head + " Text:0");
+                    heads.Add("#: " + head.Replace(" ", "_") + "[Text]:0");
                     msgctxt.Add(texts[i].name);
                     msgid.Add(text);
                 }
@@ -216,11 +216,11 @@ namespace UdonLab
                 {
                     int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
                     headIndex++;
-                    heads[index] = heads[index] + " " + head + " TextMeshPro:" + headIndex.ToString();
+                    heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[TextMeshPro]:" + headIndex.ToString();
                 }
                 else
                 {
-                    heads.Add(head + " TextMeshPro:0");
+                    heads.Add("#: " + head.Replace(" ", "_") + "[TextMeshPro]:0");
                     msgctxt.Add(textMeshPro[i].name);
                     msgid.Add(text);
                 }
@@ -245,18 +245,18 @@ namespace UdonLab
                 {
                     int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
                     headIndex++;
-                    heads[index] = heads[index] + " " + head + " TextMeshProUGUI:" + headIndex.ToString();
+                    heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[TextMeshProUGUI]:" + headIndex.ToString();
                 }
                 else
                 {
-                    heads.Add(head + " TextMeshProUGUI:0");
+                    heads.Add("#: " + head.Replace(" ", "_") + "[TextMeshProUGUI]:0");
                     msgctxt.Add(textMeshPro_ugui[i].name);
                     msgid.Add(text);
                 }
             }
             for (int i = 0; i < msgid.Count; i++)
             {
-                textList.Add("#: " + heads[i]);
+                textList.Add(heads[i]);
                 textList.Add("msgctxt \"" + msgctxt[i] + "\"");
                 textList.Add("msgid \"" + msgid[i] + "\"");
                 textList.Add("msgstr \"" + (original ? msgid[i] : "") + "\"");

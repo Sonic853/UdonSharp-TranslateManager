@@ -30,6 +30,12 @@ namespace UdonLab
         [Space(10)]
         [Header("Mode 2: Will take each Text, textMeshTexts, textMeshUGUITexts")]
         [Header("to find and replace the strings in TranslateText (not recommended!)")]
+        [Space(10)]
+        // [Header("Mode 3：将拿每个Text、textMeshTexts、textMeshUGUITexts查找匹配")]
+        // [Header("TranslatePo里的翻译文本进行替换")]
+        // [Space(10)]
+        // [Header("Mode 3: Will take each Text, textMeshTexts, textMeshUGUITexts")]
+        // [Header("to find and replace the strings in TranslatePo")]
         [Range(0, 2)]
         [SerializeField] int mode = 0;
         [Header("默认语言，0为原始语言")]
@@ -40,13 +46,23 @@ namespace UdonLab
         [SerializeField] bool startAutoTranslate = false;
         [Header("原文本")]
         [Header("Original text")]
+        // [Header("原文本（Mode为0到2时有效）")]
+        // [Header("Original text(valid when Mode is 0 to 2)")]
         [SerializeField] TranslateText originalText;
+        // [Header("原文本（Mode为3时有效）")]
+        // [Header("Original text(valid when Mode is 3)")]
+        // [SerializeField] TranslatePo originalPo;
         [Header("语言名称")]
         [Header("Language name")]
         [SerializeField] public string[] languageNames;
         [Header("翻译文本，第一个先放原文本")]
         [Header("Translate text, put original text first")]
+        // [Header("翻译文本，第一个先放原文本（Mode为0到2时有效）")]
+        // [Header("Translate text, put original text first(valid when Mode is 0 to 2)")]
         [SerializeField] TranslateText[] translateTexts;
+        // [Header("翻译文本，第一个先放原文本（Mode为3时有效）")]
+        // [Header("Translate text, put original text first(valid when Mode is 3)")]
+        // [SerializeField] TranslatePo[] translatePos;
         [Header("需要翻译的文本")]
         [Header("Text to translate")]
         [SerializeField] Text[] texts;

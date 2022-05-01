@@ -10,12 +10,13 @@ msgstr ""
 "Language: zh_CN\n"
 "Project-Id-Version: Unity Object - GameObject\n"
 
-#: GameObject/翻译/Button (2)/Text/Text Text:0 GameObject/翻译/Button (1)/Text (TMP)/Text (TMP) TextMeshProUGUI:1
+#: GameObject/翻译/Button_(2)/Text/Text[Text]:0
+#: GameObject/翻译/Button_(1)/Text_(TMP)/Text_(TMP)[TextMeshProUGUI]:1
 msgctxt "Text"
 msgid "你好，Lindinia"
 msgstr "你好，Lindinia"
 
-#: GameObject/测试文字/Back/Text/Text Text:0
+#: GameObject/测试文字/Back/Text/Text[Text]:0
 msgctxt "Text"
 msgid "不，\n"
 "我觉得不行。\n"
@@ -28,19 +29,19 @@ msgstr "不，\n"
 "我需要<b>清醒</b>。\n"
 "UGUIText"
 
-#: GameObject/Text (TMP)/Text (TMP) TextMeshPro:0
+#: GameObject/Text_(TMP)/Text_(TMP)[TextMeshPro]:0
 msgctxt "Text (TMP)"
 msgid "翻译文本管理器\n"
 "TextMeshPro"
 msgstr "翻译文本管理器\n"
 "TextMeshPro"
 
-#: GameObject/更新日志/Title/Text (TMP)/Text (TMP) TextMeshProUGUI:0
+#: GameObject/更新日志/Title/Text_(TMP)/Text_(TMP)[TextMeshProUGUI]:0
 msgctxt "Text (TMP)"
 msgid "更新日志"
 msgstr "更新日志"
 
-#: GameObject/更新日志/Scroll View/Viewport/Content/Text (TMP)/Text (TMP) TextMeshProUGUI:0
+#: GameObject/更新日志/Scroll_View/Viewport/Content/Text_(TMP)/Text_(TMP)[TextMeshProUGUI]:0
 msgctxt "Text (TMP)"
 msgid "如有任何BUG请前往Bilibili私信：Sonic853\n"
 "Sonic853@qq.com\n"
@@ -67,12 +68,12 @@ msgstr "如有任何BUG请前往Bilibili私信：Sonic853\n"
 "2022/04/26：\n"
 "增加了BGM，如有BGM提供意向（最好是原创，仅用于此地图）请在B站联系Sonic853。"
 
-#: GameObject/翻译/Button/Text (TMP)/Text (TMP) TextMeshProUGUI:0
+#: GameObject/翻译/Button/Text_(TMP)/Text_(TMP)[TextMeshProUGUI]:0
 msgctxt "Text (TMP)"
 msgid "简体中文"
 msgstr "简体中文"
 
-#: GameObject/测试文字 (1)/Back/Text (TMP) (1)/Text (TMP) (1) TextMeshProUGUI:0
+#: GameObject/测试文字_(1)/Back/Text_(TMP)_(1)/Text_(TMP)_(1)[TextMeshProUGUI]:0
 msgctxt "Text (TMP) (1)"
 msgid "不，\n"
 "我觉得不行。\n"

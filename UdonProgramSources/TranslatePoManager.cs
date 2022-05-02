@@ -73,6 +73,10 @@ namespace UdonLab
                 return translatePos[defaultLanguage]._getText(text);
             }
         }
+        public string _(string text)
+        {
+            return _getText(text);
+        }
         public void updateUI()
         {
             for (int i = 0; i < texts.Length; i++)

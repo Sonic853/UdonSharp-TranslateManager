@@ -122,6 +122,10 @@ namespace UdonLab
                 }
             }
         }
+        public string _(string text)
+        {
+            return _getText(text);
+        }
         int stringIndexOf(string[] strings, string string_)
         {
             for (int i = 0; i < strings.Length; i++)

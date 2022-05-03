@@ -108,6 +108,7 @@ namespace UdonLab
             textList.Add("\"Content-Type: text/plain; charset=UTF-8\\n\"");
             textList.Add("\"Content-Transfer-Encoding: 8bit\\n\"");
             textList.Add("\"X-Generator: Unity UITextExporter\\n\"");
+            textList.Add("\"Original-Language: " + originalLanguage + "\\n\"");
             textList.Add("\"Language: " + (original ? Language(originalLanguage) : Language(translateLanguage)) + "\\n\"");
             textList.Add("\"Project-Id-Version: Unity Object - " + obj.name + "\\n\"");
             // textList.Add("\"Last-Translator: " + Application.productName + "\\n\"");

@@ -41,6 +41,7 @@ namespace UdonLab
                 if (line.StartsWith("msgid \""))
                 {
                     // 将\\n替换为\n
+                    // Debug.Log(line.Substring(7, line.Length - 14));
                     msgid = stringArrayAdd(msgid, returnText(line.Substring(7, line.Length - 8)));
                     msgidIndex = msgid.Length - 1;
                     msgstrIndex = -1;

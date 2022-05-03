@@ -30,15 +30,17 @@ namespace UdonLab
         [SerializeField] bool getFromParent = false;
         [Header("需要翻译的父物体（勾选从父物体获取时可用）")]
         [Header("The parent object to translate (not selected when getting from parent object is not available)")]
-        [SerializeField] GameObject parentObject;
+        [SerializeField] GameObject[] parentObjects;
         [Header("需要翻译的文本（勾选从父物体获取时不可用）")]
         [Header("The text to translate (when get from parent object is not available)")]
         [SerializeField] Text[] texts;
-        [SerializeField] TextMeshPro[] textMeshTexts;
-        [SerializeField] TextMeshProUGUI[] textMeshUGUITexts;
+        // [SerializeField] TextMesh[] textMeshTexts;
+        [SerializeField] TextMeshPro[] textMeshProTexts;
+        [SerializeField] TextMeshProUGUI[] textMeshProUGUITexts;
         [HideInInspector] string[] _texts;
-        [HideInInspector] string[] _textMeshTexts;
-        [HideInInspector] string[] _textMeshUGUITexts;
+        // [HideInInspector] string[] _textMeshTexts;
+        [HideInInspector] string[] _textMeshProTexts;
+        [HideInInspector] string[] _textMeshProUGUITexts;
         public void setLanguage(int language)
         {
             defaultLanguage = language;
@@ -90,26 +92,37 @@ namespace UdonLab
                     texts[i].text = translatePos[defaultLanguage]._getText(_texts[i]);
                 }
             }
-            for (int i = 0; i < textMeshTexts.Length; i++)
+            // for (int i = 0; i < textMeshTexts.Length; i++)
+            // {
+            //     if (defaultLanguage == 0)
+            //     {
+            //         textMeshTexts[i].text = originalPo._getOriginalText(_textMeshTexts[i]);
+            //     }
+            //     else
+            //     {
+            //         textMeshTexts[i].text = translatePos[defaultLanguage]._getText(_textMeshTexts[i]);
+            //     }
+            // }
+            for (int i = 0; i < textMeshProTexts.Length; i++)
             {
                 if (defaultLanguage == 0)
                 {
-                    textMeshTexts[i].text = originalPo._getOriginalText(_textMeshTexts[i]);
+                    textMeshProTexts[i].text = originalPo._getOriginalText(_textMeshProTexts[i]);
                 }
                 else
                 {
-                    textMeshTexts[i].text = translatePos[defaultLanguage]._getText(_textMeshTexts[i]);
+                    textMeshProTexts[i].text = translatePos[defaultLanguage]._getText(_textMeshProTexts[i]);
                 }
             }
-            for (int i = 0; i < textMeshUGUITexts.Length; i++)
+            for (int i = 0; i < textMeshProUGUITexts.Length; i++)
             {
                 if (defaultLanguage == 0)
                 {
-                    textMeshUGUITexts[i].text = originalPo._getOriginalText(_textMeshUGUITexts[i]);
+                    textMeshProUGUITexts[i].text = originalPo._getOriginalText(_textMeshProUGUITexts[i]);
                 }
                 else
                 {
-                    textMeshUGUITexts[i].text = translatePos[defaultLanguage]._getText(_textMeshUGUITexts[i]);
+                    textMeshProUGUITexts[i].text = translatePos[defaultLanguage]._getText(_textMeshProUGUITexts[i]);
                 }
             }
         }
@@ -122,13 +135,29 @@ namespace UdonLab
             }
             if (getFromParent)
             {
-                texts = parentObject.GetComponentsInChildren<Text>(true);
-                textMeshTexts = parentObject.GetComponentsInChildren<TextMeshPro>(true);
-                textMeshUGUITexts = parentObject.GetComponentsInChildren<TextMeshProUGUI>(true);
+                // texts = new Text[0];
+                // // textMeshTexts = new TextMeshPro[0];
+                // textMeshProTexts = new TextMeshPro[0];
+                // textMeshProUGUITexts = new TextMeshProUGUI[0];
+                for (int i = 0; i < parentObjects.Length; i++)
+                {
+                    if (parentObjects[i] != null)
+                    {
+                        texts = textArrayAdd(texts, parentObjects[i].GetComponentsInChildren<Text>(true));
+                        // textMeshTexts = textMeshArrayAdd(textMeshTexts, parentObjects[i].GetComponentsInChildren<TextMesh>(true));
+                        textMeshProTexts = textMeshProArrayAdd(textMeshProTexts, parentObjects[i].GetComponentsInChildren<TextMeshPro>(true));
+                        textMeshProUGUITexts = textMeshProUGUIArrayAdd(textMeshProUGUITexts, parentObjects[i].GetComponentsInChildren<TextMeshProUGUI>(true));
+                    }
+                }
+                // texts = parentObject.GetComponentsInChildren<Text>(true);
+                // // textMeshTexts = parentObject.GetComponentsInChildren<TextMesh>(true);
+                // textMeshProTexts = parentObject.GetComponentsInChildren<TextMeshPro>(true);
+                // textMeshProUGUITexts = parentObject.GetComponentsInChildren<TextMeshProUGUI>(true);
             }
             _texts = new string[texts.Length];
-            _textMeshTexts = new string[textMeshTexts.Length];
-            _textMeshUGUITexts = new string[textMeshUGUITexts.Length];
+            // _textMeshTexts = new string[textMeshTexts.Length];
+            _textMeshProTexts = new string[textMeshProTexts.Length];
+            _textMeshProUGUITexts = new string[textMeshProUGUITexts.Length];
             for (int i = 0; i < texts.Length; i++)
             {
                 if (texts[i] != null)
@@ -140,32 +169,83 @@ namespace UdonLab
                     _texts[i] = "";
                 }
             }
-            for (int i = 0; i < textMeshTexts.Length; i++)
+            // for (int i = 0; i < textMeshTexts.Length; i++)
+            // {
+            //     if (textMeshTexts[i] != null)
+            //     {
+            //         _textMeshTexts[i] = textMeshTexts[i].text;
+            //     }
+            //     else
+            //     {
+            //         _textMeshTexts[i] = "";
+            //     }
+            // }
+            for (int i = 0; i < textMeshProTexts.Length; i++)
             {
-                if (textMeshTexts[i] != null)
+                if (textMeshProTexts[i] != null)
                 {
-                    _textMeshTexts[i] = textMeshTexts[i].text;
+                    _textMeshProTexts[i] = textMeshProTexts[i].text;
                 }
                 else
                 {
-                    _textMeshTexts[i] = "";
+                    _textMeshProTexts[i] = "";
                 }
             }
-            for (int i = 0; i < textMeshUGUITexts.Length; i++)
+            for (int i = 0; i < textMeshProUGUITexts.Length; i++)
             {
-                if (textMeshUGUITexts[i] != null)
+                if (textMeshProUGUITexts[i] != null)
                 {
-                    _textMeshUGUITexts[i] = textMeshUGUITexts[i].text;
+                    _textMeshProUGUITexts[i] = textMeshProUGUITexts[i].text;
                 }
                 else
                 {
-                    _textMeshUGUITexts[i] = "";
+                    _textMeshProUGUITexts[i] = "";
                 }
             }
             if (startAutoTranslate)
             {
                 updateUI();
             }
+        }
+        Text[] textArrayAdd(Text[] textArray, Text[] newTextArray)
+        {
+            Text[] temp = new Text[textArray.Length + newTextArray.Length];
+            for (int i = 0; i < textArray.Length; i++)
+            {
+                temp[i] = textArray[i];
+            }
+            for (int i = 0; i < newTextArray.Length; i++)
+            {
+                temp[textArray.Length + i] = newTextArray[i];
+            }
+            return temp;
+        }
+        // TextMesh[] textMeshArrayAdd(TextMesh[] textMeshArray, TextMesh[] newTextMeshArray)
+        TextMeshPro[] textMeshProArrayAdd(TextMeshPro[] textMeshProArray, TextMeshPro[] newTextMeshProArray)
+        {
+            TextMeshPro[] temp = new TextMeshPro[textMeshProArray.Length + newTextMeshProArray.Length];
+            for (int i = 0; i < textMeshProArray.Length; i++)
+            {
+                temp[i] = textMeshProArray[i];
+            }
+            for (int i = 0; i < newTextMeshProArray.Length; i++)
+            {
+                temp[textMeshProArray.Length + i] = newTextMeshProArray[i];
+            }
+            return temp;
+        }
+        TextMeshProUGUI[] textMeshProUGUIArrayAdd(TextMeshProUGUI[] textMeshProUGUIArray, TextMeshProUGUI[] newTextMeshProUGUIArray)
+        {
+            TextMeshProUGUI[] temp = new TextMeshProUGUI[textMeshProUGUIArray.Length + newTextMeshProUGUIArray.Length];
+            for (int i = 0; i < textMeshProUGUIArray.Length; i++)
+            {
+                temp[i] = textMeshProUGUIArray[i];
+            }
+            for (int i = 0; i < newTextMeshProUGUIArray.Length; i++)
+            {
+                temp[textMeshProUGUIArray.Length + i] = newTextMeshProUGUIArray[i];
+            }
+            return temp;
         }
     }
 }

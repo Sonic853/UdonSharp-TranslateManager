@@ -507,7 +507,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: parentObject
+      Data: parentObjects
     - Name: $v
       Entry: 7
       Data: 39|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -519,7 +519,7 @@ MonoBehaviour:
       Data: 41|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: UnityEngine.GameObject, UnityEngine.CoreModule
+      Data: UnityEngine.GameObject[], UnityEngine.CoreModule
     - Name: 
       Entry: 8
       Data: 
@@ -531,13 +531,13 @@ MonoBehaviour:
       Data: 0
     - Name: symbolResolvedTypeName
       Entry: 1
-      Data: UnityEngineGameObject
+      Data: UnityEngineGameObjectArray
     - Name: symbolOriginalName
       Entry: 1
-      Data: parentObject
+      Data: parentObjects
     - Name: symbolUniqueName
       Entry: 1
-      Data: parentObject
+      Data: parentObjects
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -682,7 +682,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: textMeshTexts
+      Data: textMeshProTexts
     - Name: $v
       Entry: 7
       Data: 53|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -709,10 +709,10 @@ MonoBehaviour:
       Data: TMProTextMeshProArray
     - Name: symbolOriginalName
       Entry: 1
-      Data: textMeshTexts
+      Data: textMeshProTexts
     - Name: symbolUniqueName
       Entry: 1
-      Data: textMeshTexts
+      Data: textMeshProTexts
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -751,7 +751,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: textMeshUGUITexts
+      Data: textMeshProUGUITexts
     - Name: $v
       Entry: 7
       Data: 58|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -778,10 +778,10 @@ MonoBehaviour:
       Data: TMProTextMeshProUGUIArray
     - Name: symbolOriginalName
       Entry: 1
-      Data: textMeshUGUITexts
+      Data: textMeshProUGUITexts
     - Name: symbolUniqueName
       Entry: 1
-      Data: textMeshUGUITexts
+      Data: textMeshProUGUITexts
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -889,7 +889,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: _textMeshTexts
+      Data: _textMeshProTexts
     - Name: $v
       Entry: 7
       Data: 68|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -910,10 +910,10 @@ MonoBehaviour:
       Data: SystemStringArray
     - Name: symbolOriginalName
       Entry: 1
-      Data: _textMeshTexts
+      Data: _textMeshProTexts
     - Name: symbolUniqueName
       Entry: 1
-      Data: _textMeshTexts
+      Data: _textMeshProTexts
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -952,7 +952,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: _textMeshUGUITexts
+      Data: _textMeshProUGUITexts
     - Name: $v
       Entry: 7
       Data: 72|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -973,10 +973,10 @@ MonoBehaviour:
       Data: SystemStringArray
     - Name: symbolOriginalName
       Entry: 1
-      Data: _textMeshUGUITexts
+      Data: _textMeshProUGUITexts
     - Name: symbolUniqueName
       Entry: 1
-      Data: _textMeshUGUITexts
+      Data: _textMeshProUGUITexts
     - Name: symbolDefaultValue
       Entry: 6
       Data: 

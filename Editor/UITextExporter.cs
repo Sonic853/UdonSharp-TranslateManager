@@ -13,10 +13,11 @@ namespace UdonLab
         // 判断当前编辑器语言
         static bool isChinese = true;
         private bool canMakePo = true;
+        static UITextExporter window;
         [MenuItem("Translation/Export UI Text to po")]
         static void Init()
         {
-            UITextExporter window = GetWindow<UITextExporter>();
+            window = GetWindow<UITextExporter>();
             window.titleContent = new GUIContent(isChinese ? "导出UI文本工具" : "Export UI Text");
             window.Show();
         }
@@ -37,14 +38,21 @@ namespace UdonLab
             "Russian",
             "Traditional Chinese",
             };
-        private GameObject obj;
-        private Text[] texts;
-        private TextMeshPro[] textMeshPro;
-        private TextMeshProUGUI[] textMeshPro_ugui;
+        SerializedObject serializedObject;
+        [SerializeField]
+        private GameObject[] obj;
+        private Text[][] texts;
+        // private TextMesh[][] textMeshes;
+        private TextMeshPro[][] textMeshPro;
+        private TextMeshProUGUI[][] textMeshPro_ugui;
         [MenuItem("Translation/Switch Language(CHS,EN)")]
         static void SwitchLanguage()
         {
             isChinese = !isChinese;
+        }
+        private void OnEnable()
+        {
+            serializedObject = new SerializedObject(this);
         }
         private void OnGUI()
         {
@@ -55,7 +63,9 @@ namespace UdonLab
             popupTranslationIndex = EditorGUILayout.Popup(isChinese ? "翻译语言" : "Translation Language", popupTranslationIndex, popupLanguageList);
             translateLanguage = popupLanguageList[popupTranslationIndex];
             GUILayout.Label(isChinese ? "请选择要导出文本的父物体" : "Please select the parent object of the text you want to export");
-            obj = EditorGUILayout.ObjectField((isChinese ? "父物体" : "parent"), obj, typeof(GameObject), true) as GameObject;
+            // obj = EditorGUILayout.ObjectField((isChinese ? "父物体" : "parent"), obj, typeof(GameObject), true) as GameObject;
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("obj"), true);
+            serializedObject.ApplyModifiedProperties();
             if (GUILayout.Button(isChinese ? "读取" : "Read"))
             {
                 if (obj == null)
@@ -64,15 +74,41 @@ namespace UdonLab
                 }
                 if (obj != null)
                 {
-                    Debug.Log(isChinese ? "已选择父物体：" + obj.name : "Parent object: " + obj.name);
+                    Debug.Log(isChinese ? "已选择父物体：" + obj.Length : "Parent object: " + obj.Length);
                     // Debug.Log(isChinese ? "已选择父物体：" + obj.name : "Parent object: " + obj.name);
-                    texts = obj.GetComponentsInChildren<Text>(true);
-                    textMeshPro = obj.GetComponentsInChildren<TextMeshPro>(true);
-                    textMeshPro_ugui = obj.GetComponentsInChildren<TextMeshProUGUI>(true);
+                    int textCount = 0;
+                    // int textMeshCount = 0;
+                    int textMeshProCount = 0;
+                    int textMeshProUGUICount = 0;
+                    texts = new Text[obj.Length][];
+                    // textMeshes = new TextMesh[obj.Length][];
+                    textMeshPro = new TextMeshPro[obj.Length][];
+                    textMeshPro_ugui = new TextMeshProUGUI[obj.Length][];
+                    for (int i = 0; i < obj.Length; i++)
+                    {
+                        if (obj[i] == null)
+                        {
+                            continue;
+                        }
+                        texts[i] = obj[i].GetComponentsInChildren<Text>(true);
+                        // textMeshes[i] = obj[i].GetComponentsInChildren<TextMesh>(true);
+                        textMeshPro[i] = obj[i].GetComponentsInChildren<TextMeshPro>(true);
+                        textMeshPro_ugui[i] = obj[i].GetComponentsInChildren<TextMeshProUGUI>(true);
+                        textCount += texts[i].Length;
+                        // textMeshCount += textMeshes[i].Length;
+                        textMeshProCount += textMeshPro[i].Length;
+                        textMeshProUGUICount += textMeshPro_ugui[i].Length;
+                    }
+                    // texts = obj.GetComponentsInChildren<Text>(true);
+                    // textMeshPro = obj.GetComponentsInChildren<TextMeshPro>(true);
+                    // textMeshPro_ugui = obj.GetComponentsInChildren<TextMeshProUGUI>(true);
                     Debug.Log((isChinese ? "读取文本" : "Text read") + ": ");
-                    Debug.Log("Texts: " + texts.Length);
-                    Debug.Log("TextMeshPro: " + textMeshPro.Length);
-                    Debug.Log("TextMeshProUGUI: " + textMeshPro_ugui.Length);
+                    Debug.Log(isChinese ? "文本数量：" + textCount : "Text count: " + textCount);
+                    Debug.Log(isChinese ? "TextMeshPro数量：" + textMeshProCount : "TextMeshPro count: " + textMeshProCount);
+                    Debug.Log(isChinese ? "TextMeshProUGUI数量：" + textMeshProUGUICount : "TextMeshProUGUI count: " + textMeshProUGUICount);
+                    // Debug.Log("Texts: " + texts.Length);
+                    // Debug.Log("TextMeshPro: " + textMeshPro.Length);
+                    // Debug.Log("TextMeshProUGUI: " + textMeshPro_ugui.Length);
                     if (texts.Length == 0 && textMeshPro.Length == 0 && textMeshPro_ugui.Length == 0)
                     {
                         Debug.LogError(isChinese ? "该父物体没有文本" : "This parent object has no text");
@@ -97,8 +133,10 @@ namespace UdonLab
         }
         private void Export(bool original = false)
         {
+            // 读取场景名称
+            string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
             List<string> textList = new List<string>();
-            textList.Add("# Translation of Unity Object - " + obj.name + " - Original Language: " + originalLanguage);
+            textList.Add("# Translation of Unity Object - " + sceneName + "- Original Language: " + originalLanguage);
             textList.Add("# This file is generated by UdonLab's UITextExporter");
             textList.Add("msgid \"\"");
             textList.Add("msgstr \"\"");
@@ -110,7 +148,7 @@ namespace UdonLab
             textList.Add("\"X-Generator: Unity UITextExporter\\n\"");
             textList.Add("\"Original-Language: " + originalLanguage + "\\n\"");
             textList.Add("\"Language: " + (original ? Language(originalLanguage) : Language(translateLanguage)) + "\\n\"");
-            textList.Add("\"Project-Id-Version: Unity Object - " + obj.name + "\\n\"");
+            textList.Add("\"Project-Id-Version: Unity Object - " + sceneName + "\\n\"");
             // textList.Add("\"Last-Translator: " + Application.productName + "\\n\"");
             textList.Add("");
             // for (int i = 0; i < texts.Length; i++)
@@ -168,91 +206,94 @@ namespace UdonLab
             List<string> msgctxt = new List<string>();
             List<string> msgid = new List<string>();
             // List<string> msgstr = new List<string>();
-            for (int i = 0; i < texts.Length; i++)
+            for (int j = 0; j < obj.Length; j++)
             {
-                string head = texts[i].name;
-                GameObject parent = texts[i].gameObject;
-                while (parent != obj)
+                for (int i = 0; i < texts[j].Length; i++)
                 {
-                    head = parent.name + "/" + head;
-                    parent = parent.transform.parent.gameObject;
+                    string head = texts[j][i].name;
+                    GameObject parent = texts[j][i].gameObject;
+                    while (parent != obj[j])
+                    {
+                        head = parent.name + "/" + head;
+                        parent = parent.transform.parent.gameObject;
+                    }
+                    if (obj[j].name != head)
+                    {
+                        head = obj[j].name + "/" + head;
+                    }
+                    // 如果出现换行符，则替换为\\n\"\n\"
+                    string text = texts[j][i].text.Replace("\n", "\\n\"\n\"");
+                    int index = msgid.IndexOf(text);
+                    if (index != -1)
+                    {
+                        int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
+                        headIndex++;
+                        heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[Text]:" + headIndex.ToString();
+                    }
+                    else
+                    {
+                        heads.Add("#: " + head.Replace(" ", "_") + "[Text]:0");
+                        msgctxt.Add(texts[j][i].name);
+                        msgid.Add(text);
+                    }
                 }
-                if(obj.name != head)
+                for (int i = 0; i < textMeshPro.Length; i++)
                 {
-                    head = obj.name + "/" + head;
+                    string head = textMeshPro[j][i].name;
+                    GameObject parent = textMeshPro[j][i].gameObject;
+                    while (parent != obj[j])
+                    {
+                        head = parent.name + "/" + head;
+                        parent = parent.transform.parent.gameObject;
+                    }
+                    if (obj[j].name != head)
+                    {
+                        head = obj[j].name + "/" + head;
+                    }
+                    // 如果出现换行符，则替换为\\n\"\n\"
+                    string text = textMeshPro[j][i].text.Replace("\n", "\\n\"\n\"");
+                    int index = msgid.IndexOf(text);
+                    if (index != -1)
+                    {
+                        int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
+                        headIndex++;
+                        heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[TextMeshPro]:" + headIndex.ToString();
+                    }
+                    else
+                    {
+                        heads.Add("#: " + head.Replace(" ", "_") + "[TextMeshPro]:0");
+                        msgctxt.Add(textMeshPro[j][i].name);
+                        msgid.Add(text);
+                    }
                 }
-                // 如果出现换行符，则替换为\\n\"\n\"
-                string text = texts[i].text.Replace("\n", "\\n\"\n\"");
-                int index = msgid.IndexOf(text);
-                if (index != -1)
+                for (int i = 0; i < textMeshPro_ugui.Length; i++)
                 {
-                    int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
-                    headIndex++;
-                    heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[Text]:" + headIndex.ToString();
-                }
-                else
-                {
-                    heads.Add("#: " + head.Replace(" ", "_") + "[Text]:0");
-                    msgctxt.Add(texts[i].name);
-                    msgid.Add(text);
-                }
-            }
-            for (int i = 0; i < textMeshPro.Length; i++)
-            {
-                string head = textMeshPro[i].name;
-                GameObject parent = textMeshPro[i].gameObject;
-                while (parent != obj)
-                {
-                    head = parent.name + "/" + head;
-                    parent = parent.transform.parent.gameObject;
-                }
-                if(obj.name != head)
-                {
-                    head = obj.name + "/" + head;
-                }
-                // 如果出现换行符，则替换为\\n\"\n\"
-                string text = textMeshPro[i].text.Replace("\n", "\\n\"\n\"");
-                int index = msgid.IndexOf(text);
-                if (index != -1)
-                {
-                    int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
-                    headIndex++;
-                    heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[TextMeshPro]:" + headIndex.ToString();
-                }
-                else
-                {
-                    heads.Add("#: " + head.Replace(" ", "_") + "[TextMeshPro]:0");
-                    msgctxt.Add(textMeshPro[i].name);
-                    msgid.Add(text);
-                }
-            }
-            for (int i = 0; i < textMeshPro_ugui.Length; i++)
-            {
-                string head = textMeshPro_ugui[i].name;
-                GameObject parent = textMeshPro_ugui[i].gameObject;
-                while (parent != obj)
-                {
-                    head = parent.name + "/" + head;
-                    parent = parent.transform.parent.gameObject;
-                }
-                if(obj.name != head)
-                {
-                    head = obj.name + "/" + head;
-                }
-                // 如果出现换行符，则替换为\\n\"\n\"
-                string text = textMeshPro_ugui[i].text.Replace("\n", "\\n\"\n\"");
-                int index = msgid.IndexOf(text);
-                if (index != -1)
-                {
-                    int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
-                    headIndex++;
-                    heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[TextMeshProUGUI]:" + headIndex.ToString();
-                }
-                else
-                {
-                    heads.Add("#: " + head.Replace(" ", "_") + "[TextMeshProUGUI]:0");
-                    msgctxt.Add(textMeshPro_ugui[i].name);
-                    msgid.Add(text);
+                    string head = textMeshPro_ugui[j][i].name;
+                    GameObject parent = textMeshPro_ugui[j][i].gameObject;
+                    while (parent != obj[j])
+                    {
+                        head = parent.name + "/" + head;
+                        parent = parent.transform.parent.gameObject;
+                    }
+                    if (obj[j].name != head)
+                    {
+                        head = obj[j].name + "/" + head;
+                    }
+                    // 如果出现换行符，则替换为\\n\"\n\"
+                    string text = textMeshPro_ugui[j][i].text.Replace("\n", "\\n\"\n\"");
+                    int index = msgid.IndexOf(text);
+                    if (index != -1)
+                    {
+                        int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
+                        headIndex++;
+                        heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[TextMeshProUGUI]:" + headIndex.ToString();
+                    }
+                    else
+                    {
+                        heads.Add("#: " + head.Replace(" ", "_") + "[TextMeshProUGUI]:0");
+                        msgctxt.Add(textMeshPro_ugui[j][i].name);
+                        msgid.Add(text);
+                    }
                 }
             }
             for (int i = 0; i < msgid.Count; i++)
@@ -263,7 +304,7 @@ namespace UdonLab
                 textList.Add("msgstr \"" + (original ? msgid[i] : "") + "\"");
                 textList.Add("");
             }
-            string path = EditorUtility.SaveFilePanel(isChinese ? "导出文本" : "Export text", "", obj.name + "_" + (original ? Language(originalLanguage) : Language(translateLanguage)), "po.txt");
+            string path = EditorUtility.SaveFilePanel(isChinese ? "导出文本" : "Export text", "", sceneName + "_" + (original ? Language(originalLanguage) : Language(translateLanguage)), "po.txt,po");
             if (path != "")
             {
                 System.IO.File.WriteAllLines(path, textList.ToArray());

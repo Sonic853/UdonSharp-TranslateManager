@@ -229,6 +229,10 @@ namespace UdonLab
                         int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
                         headIndex++;
                         heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[Text]:" + headIndex.ToString();
+                        if (!msgctxt[index].Contains(texts[j][i].name))
+                        {
+                            msgctxt[index] += "|" + texts[j][i].name;
+                        }
                     }
                     else
                     {
@@ -258,6 +262,10 @@ namespace UdonLab
                         int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
                         headIndex++;
                         heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[TextMeshPro]:" + headIndex.ToString();
+                        if (!msgctxt[index].Contains(textMeshPro[j][i].name))
+                        {
+                            msgctxt[index] += "|" + textMeshPro[j][i].name;
+                        }
                     }
                     else
                     {
@@ -287,6 +295,10 @@ namespace UdonLab
                         int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
                         headIndex++;
                         heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[TextMeshProUGUI]:" + headIndex.ToString();
+                        if (!msgctxt[index].Contains(textMeshPro_ugui[j][i].name))
+                        {
+                            msgctxt[index] += "|" + textMeshPro_ugui[j][i].name;
+                        }
                     }
                     else
                     {

@@ -42,29 +42,29 @@ namespace UdonLab
                 {
                     // 将\\n替换为\n
                     // Debug.Log(line.Substring(7, line.Length - 14));
-                    msgid = stringArrayAdd(msgid, returnText(line.Substring(7, line.Length - 8)));
+                    msgid = stringArrayAdd(msgid, returnText(line.Substring(7, line.LastIndexOf('"') - 7)));
                     msgidIndex = msgid.Length - 1;
                     msgstrIndex = -1;
                 }
                 else if (line.StartsWith("msgstr \""))
                 {
-                    msgstr = stringArrayAdd(msgstr, returnText(line.Substring(8, line.Length - 9)));
+                    msgstr = stringArrayAdd(msgstr, returnText(line.Substring(8, line.LastIndexOf('"') - 8)));
                     msgstrIndex = msgstr.Length - 1;
                     msgidIndex = -1;
                 }
                 // 找到符合"Language: 的行，然后获取语言，同时去除后面的换行
                 else if (line.StartsWith("\"Language: ") && msgstrIndex == 0)
                 {
-                    language = line.Substring(11, line.Length - 12);
+                    language = line.Substring(11, line.LastIndexOf('"') - 11);
                     // 找到并去除\n
-                    language = language.IndexOf("\\n") == -1 ? language : language.Substring(0, language.IndexOf("\\n"));
+                    language = language.IndexOf("\\n") == -1 ? language : language.Substring(0, language.LastIndexOf("\\n"));
                 }
                 // 找到符合"Last-Translator: 的行，然后获取语言，同时去除后面的换行
                 else if (line.StartsWith("\"Last-Translator: ") && msgstrIndex == 0)
                 {
-                    lastTranslator = line.Substring(20, line.Length - 21);
+                    lastTranslator = line.Substring(20, line.LastIndexOf('"') - 20);
                     // 找到并去除\n
-                    lastTranslator = lastTranslator.IndexOf("\\n") == -1 ? lastTranslator : lastTranslator.Substring(0, lastTranslator.IndexOf("\\n"));
+                    lastTranslator = lastTranslator.IndexOf("\\n") == -1 ? lastTranslator : lastTranslator.Substring(0, lastTranslator.LastIndexOf("\\n"));
                     // 将<和>替换为＜和＞
                     lastTranslator = lastTranslator.Replace("<", "＜").Replace(">", "＞");
                 }
@@ -72,11 +72,11 @@ namespace UdonLab
                 {
                     if (msgidIndex != -1 && msgidIndex != 0)
                     {
-                        msgid[msgidIndex] += returnText(line.Substring(1, line.Length - 2));
+                        msgid[msgidIndex] += returnText(line.Substring(1, line.LastIndexOf('"') - 1));
                     }
                     else if (msgstrIndex != -1 && msgstrIndex != 0)
                     {
-                        msgstr[msgstrIndex] += returnText(line.Substring(1, line.Length - 2));
+                        msgstr[msgstrIndex] += returnText(line.Substring(1, line.LastIndexOf('"') - 1));
                     }
                 }
             }
@@ -92,11 +92,16 @@ namespace UdonLab
         }
         string returnText(string text)
         {
-            if (text.EndsWith("\""))
+            // if (text.EndsWith("\""))
+            // {
+            //     text = text.Substring(0, text.Length - 1);
+            // }
+            if (text.EndsWith("\\\\n"))
             {
-                text = text.Substring(0, text.Length - 1);
+                text = text.Substring(0, text.Length - 3);
+                text = text + "\\n";
             }
-            if (text.EndsWith("\\n"))
+            else if (text.EndsWith("\\n"))
             {
                 text = text.Substring(0, text.Length - 2);
                 text = text + "\n";

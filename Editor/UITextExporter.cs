@@ -131,12 +131,12 @@ namespace UdonLab
                 Export(true);
             }
             EditorGUI.BeginDisabledGroup(canMakePo);
-            if (GUILayout.Button(isChinese ? "导出(uPoEditor)" : "Export"))
+            if (GUILayout.Button(isChinese ? "导出(uPoEditor)" : "Export(uPoEditor)"))
             {
                 Export(false,true);
             }
             EditorGUI.BeginDisabledGroup(canMakePo);
-            if (GUILayout.Button(isChinese ? "导出原文本(uPoEditor)" : "Export Original Language"))
+            if (GUILayout.Button(isChinese ? "导出原文本(uPoEditor)" : "Export Original Language(uPoEditor)"))
             {
                 Export(true,true);
             }

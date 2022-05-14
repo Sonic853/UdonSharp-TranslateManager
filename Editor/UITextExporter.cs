@@ -130,8 +130,18 @@ namespace UdonLab
             {
                 Export(true);
             }
+            EditorGUI.BeginDisabledGroup(canMakePo);
+            if (GUILayout.Button(isChinese ? "导出(uPoEditor)" : "Export"))
+            {
+                Export(false,true);
+            }
+            EditorGUI.BeginDisabledGroup(canMakePo);
+            if (GUILayout.Button(isChinese ? "导出原文本(uPoEditor)" : "Export Original Language"))
+            {
+                Export(true,true);
+            }
         }
-        private void Export(bool original = false)
+        private void Export(bool original = false,bool uPoEditor = false)
         {
             // 读取场景名称
             string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
@@ -221,6 +231,7 @@ namespace UdonLab
                     {
                         head = obj[j].name + "/" + head;
                     }
+                    head = uPoEditor ? head : head.Replace(" ", "_");
                     // 如果出现换行符，则替换为\\n\"\n\"
                     string text = texts[j][i].text.Replace("\n", "\\n\"\n\"");
                     int index = msgid.IndexOf(text);
@@ -228,7 +239,7 @@ namespace UdonLab
                     {
                         int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
                         headIndex++;
-                        heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[Text]:" + headIndex.ToString();
+                        heads[index] = heads[index] + "\n#: " + head + "[Text]:" + headIndex.ToString();
                         if (!msgctxt[index].Contains(texts[j][i].name))
                         {
                             msgctxt[index] += "|" + texts[j][i].name;
@@ -236,12 +247,12 @@ namespace UdonLab
                     }
                     else
                     {
-                        heads.Add("#: " + head.Replace(" ", "_") + "[Text]:0");
+                        heads.Add("#: " + head + "[Text]:0");
                         msgctxt.Add(texts[j][i].name);
                         msgid.Add(text);
                     }
                 }
-                for (int i = 0; i < textMeshPro.Length; i++)
+                for (int i = 0; i < textMeshPro[j].Length; i++)
                 {
                     string head = textMeshPro[j][i].name;
                     GameObject parent = textMeshPro[j][i].gameObject;
@@ -254,6 +265,7 @@ namespace UdonLab
                     {
                         head = obj[j].name + "/" + head;
                     }
+                    head = uPoEditor ? head : head.Replace(" ", "_");
                     // 如果出现换行符，则替换为\\n\"\n\"
                     string text = textMeshPro[j][i].text.Replace("\n", "\\n\"\n\"");
                     int index = msgid.IndexOf(text);
@@ -261,7 +273,7 @@ namespace UdonLab
                     {
                         int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
                         headIndex++;
-                        heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[TextMeshPro]:" + headIndex.ToString();
+                        heads[index] = heads[index] + "\n#: " + head + "[TextMeshPro]:" + headIndex.ToString();
                         if (!msgctxt[index].Contains(textMeshPro[j][i].name))
                         {
                             msgctxt[index] += "|" + textMeshPro[j][i].name;
@@ -269,12 +281,12 @@ namespace UdonLab
                     }
                     else
                     {
-                        heads.Add("#: " + head.Replace(" ", "_") + "[TextMeshPro]:0");
+                        heads.Add("#: " + head + "[TextMeshPro]:0");
                         msgctxt.Add(textMeshPro[j][i].name);
                         msgid.Add(text);
                     }
                 }
-                for (int i = 0; i < textMeshPro_ugui.Length; i++)
+                for (int i = 0; i < textMeshPro_ugui[j].Length; i++)
                 {
                     string head = textMeshPro_ugui[j][i].name;
                     GameObject parent = textMeshPro_ugui[j][i].gameObject;
@@ -287,6 +299,7 @@ namespace UdonLab
                     {
                         head = obj[j].name + "/" + head;
                     }
+                    head = uPoEditor ? head : head.Replace(" ", "_");
                     // 如果出现换行符，则替换为\\n\"\n\"
                     string text = textMeshPro_ugui[j][i].text.Replace("\n", "\\n\"\n\"");
                     int index = msgid.IndexOf(text);
@@ -294,7 +307,7 @@ namespace UdonLab
                     {
                         int headIndex = int.Parse(heads[index].Substring(heads[index].Length - 1, 1));
                         headIndex++;
-                        heads[index] = heads[index] + "\n#: " + head.Replace(" ", "_") + "[TextMeshProUGUI]:" + headIndex.ToString();
+                        heads[index] = heads[index] + "\n#: " + head + "[TextMeshProUGUI]:" + headIndex.ToString();
                         if (!msgctxt[index].Contains(textMeshPro_ugui[j][i].name))
                         {
                             msgctxt[index] += "|" + textMeshPro_ugui[j][i].name;
@@ -302,7 +315,7 @@ namespace UdonLab
                     }
                     else
                     {
-                        heads.Add("#: " + head.Replace(" ", "_") + "[TextMeshProUGUI]:0");
+                        heads.Add("#: " + head + "[TextMeshProUGUI]:0");
                         msgctxt.Add(textMeshPro_ugui[j][i].name);
                         msgid.Add(text);
                     }
